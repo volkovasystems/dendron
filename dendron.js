@@ -61,12 +61,15 @@
 			"hashid": "hashids",
 			"heredito": "heredito",
 			"llamalize": "llamalize",
+			"loosen": "loosen",
 			"raze": "raze",
 			"shardize": "shardize",
+			"silph": "silph",
 			"symbiote": "symbiote",
 			"Olivant": "olivant",
 			"optcall": "optcall",
 			"optfor": "optfor",
+			"tinge": "tinge",
 			"titlelize": "titlelize",
 			"U200b": "u200b",
 			"uuid": "node-uuid"
@@ -93,6 +96,7 @@ var optfor = require( "optfor" );
 var raze = require( "raze" );
 var shardize = require( "shardize" );
 var symbiote = require( "symbiote" );
+var tinge = require( "tinge" );
 var titlelize = require( "titlelize" );
 var U200b = require( "u200b" );
 var uuid = require( "node-uuid" );
@@ -120,10 +124,9 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 		optfor( arguments, STRING );
 
 	if( typeof engine == FUNCTION ||
-	  	typeof engine == STRING )
+		typeof engine == STRING )
 	{
-		var name = engine.name ||
-			( ( typeof engine == STRING )? engine : "" );
+		var name = engine.name || ( ( typeof engine == STRING )? engine : "" );
 
 		if( name in Dendron.registry ){
 			harden( "engine", name, this );
@@ -163,7 +166,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 
 /*;
 	@method-documentation:
-		Wraps a function or create a myelin engine from a namespace.
+		Wraps a function or create a dendron engine from a namespace.
 	@end-method-documentation
 
 	@option:
@@ -196,15 +199,13 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 		name = engine.name;
 	}
 
-	if( !name ||
-		typeof name != STRING )
-	{
+	if( !name || typeof name != STRING ){
 		Fatal( "invalid engine name", engine, option );
 
 		return this;
 	}
 
-	name = llamalize( titlelize( name ), true );
+	name = llamalize( name, true );
 
 	if( name in Dendron.registry ){
 		Warning( "engine already created", name )
@@ -221,14 +222,10 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	Engine.prototype.name = option.name || "document";
 
-	Engine.prototype.salt = option.salt ||
-		global[ cobralize( [ option.name, "salt" ].join( "-" ) ) ] ||
-		( ( typeof this.salt == FUNCTION ) && this.salt( ) ) ||
-		"";
+	Engine.prototype.salt = option.salt || this.sodium( );
 
 	Engine.prototype.initialize = option.initialize ||
-		( typeof engine == FUNCTION &&
-			( engine.prototype.initialize || engine ) ) ||
+		( typeof engine == FUNCTION && ( engine.prototype.initialize || engine ) ) ||
 		function initialize( option, callback ){
 			called.bind( this )( callback )( null, this, option );
 			return this;
@@ -238,7 +235,7 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	if( typeof engine == "function" ){
 		var engineProperty = Object.getOwnPropertyNames( engine.prototype );
 		var enginePropertyLength = engineProperty.length;
-		for( var index = 0; index < enginePropertyLength; index++ ){
+		for( let index = 0; index < enginePropertyLength; index++ ){
 			var property = engineProperty[ index ];
 
 			Engine.prototype[ property ] = engine.prototype[ property ];
@@ -269,6 +266,31 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	return this;
 };
 
+/*;
+	@method-documentation:
+		Loads the engine options.
+	@end-method-documentation
+
+	@option:
+		{
+			"engine": {
+				"name": "string",
+				"title": "string",
+				"mold": Lemuria,
+				"model": mongoose.Model,
+				"salt": "string",
+				"difference": "string"
+			},
+
+			"name": "string",
+			"title": "string",
+			"mold": Lemuria,
+			"model": mongoose.Model,
+			"salt": "string",
+			"difference": "string"
+		}
+	@end-option
+*/
 Dendron.prototype.load = function load( option, callback ){
 	/*;
 		@meta-configuration:
@@ -301,8 +323,8 @@ Dendron.prototype.load = function load( option, callback ){
 
 	this.title = engine.title || this.title || titlelize( this.name );
 
-	this.mold = engine.mold ||
-		global[ llamalize( [ this.title, "Mold" ].join( "-" ), true ) ];
+	var mold = llamalize( [ this.title, "Mold" ].join( "-" ), true );
+	this.mold = engine.mold || global[ mold ];
 
 	if( ( !this.mold || _.isEmpty( this.mold ) ) &&
 		( !engine.model || _.isEmpty( engine.model ) ) )
@@ -324,11 +346,7 @@ Dendron.prototype.load = function load( option, callback ){
 		return this;
 	}
 
-	this.salt = engine.salt ||
-		global[ cobralize( [ this.name, "salt" ].join( "-" ) ) ] ||
-		( ( typeof this.salt == FUNCTION ) && this.salt( ) ) ||
-		( ( typeof this.salt == STRING ) && this.salt ) ||
-		"";
+	this.salt = engine.salt || this.salt || this.sodium( );
 
 	if( typeof this.salt != STRING ){
 		Fatal( "invalid salt", option )
@@ -348,6 +366,98 @@ Dendron.prototype.load = function load( option, callback ){
 	this.difference = engine.difference || this.difference || this.name;
 
 	callback( null, this, option );
+
+	return this;
+};
+
+/*;
+	@method-documentation:
+		Extract data from option.
+	@end-method-documentation
+
+	@option:
+		{
+			"data:required": "object"
+		}
+	@end-option
+*/
+Dendron.prototype.data = function data( option ){
+	option = option || this.option;
+
+	var name = llamalize( this.name );
+
+	var entity = option.data || option[ name ] || { };
+
+	option.data = entity;
+
+	return entity;
+};
+
+/*;
+	@method-documentation:
+		Extract list from option.
+	@end-method-documentation
+
+	@option:
+		{
+			"list:required": Array,
+			"data": Array
+		}
+	@end-option
+*/
+Dendron.prototype.list = function list( option ){
+	option = option || this.option;
+
+	var name = llamalize( this.name );
+
+	var array = option.list || ( doubt( option[ name ] ).ARRAY )? option[ name ] : [ ];
+
+	option.list = array;
+
+	return array;
+};
+
+/*;
+	@method-documentation:
+		Extract and format factor from option.
+	@end-method-documentation
+
+	@option:
+		{
+			"data:required": "object",
+		}
+	@end-option
+*/
+Dendron.prototype.factor = function factor( option ){
+	option = option || this.option;
+
+	var data = loosen( this.data( option ) );
+
+	option.factor = option.factor ||
+		Object.keys( this.mold.factor )
+			.map( ( function onEachFactor( point ){
+				return silph( data, point );
+			} ).bind( this ) );
+
+	return option.factor;
+};
+
+/*;
+	@method-documentation:
+		Merge identity to data.
+	@end-method-documentation
+*/
+Dendron.prototype.mergeIdentity = function mergeIdentity( option ){
+	option = option || this.option;
+
+	if( option.data && option.identity ){
+		option.data.reference = option.data.reference || option.identity.reference;
+		option.data.hash = option.data.hash || option.identity.hash;
+		option.data.stamp = option.data.stamp || option.identity.stamp;
+		option.data.short = option.data.short || option.identity.short;
+		option.data.code = option.data.code || option.identity.code;
+		option.data.path = option.data.path || option.identity.path;
+	}
 
 	return this;
 };
@@ -382,9 +492,22 @@ Dendron.prototype.loose = function loose( ){
 	return this;
 };
 
+/*;
+	@method-documentation:
+		Append the method in the prototype chain.
+
+		The method is pre-configured.
+	@end-method-documentation
+*/
 Dendron.prototype.use = function use( method ){
 	if( typeof method != FUNCTION ){
 		Fatal( "invalid method", method );
+
+		return this;
+	}
+
+	if( !this.engine ){
+		Fatal( "engine is not configured" );
 
 		return this;
 	}
@@ -393,13 +516,39 @@ Dendron.prototype.use = function use( method ){
 	method = optcall.wrap( method );
 
 	var Engine = this[ this.engine ];
+
+	if( !Engine ){
+		Fatal( "engine does not exists" );
+
+		return this;
+	}
+
 	Engine.prototype[ property ] = method;
 
-	rootEngine[ property ] = method;
+	var rootEngine = Engine.engine;
+
+	if( !rootEngine ){
+		Fatal( "root engine not created" );
+
+		return this;
+	}
+
+	if( !( property in rootEngine ) ){
+		rootEngine[ property ] = method.bind( rootEngine );
+	}
+
+	if( !( property in this ) ){
+		this[ property ] = method.bind( this );
+	}
 
 	return this;
 };
 
+/*;
+	@method-documentation:
+		Calls the overridden method.
+	@end-method-documentation
+*/
 Dendron.prototype.method = function method( action, name ){
 	/*;
 		@meta-configuration:
@@ -438,9 +587,7 @@ Dendron.prototype.method = function method( action, name ){
 	if( typeof this[ methodName ] == FUNCTION ){
 		return this[ methodName ].bind( this );
 
-	}else if( typeof this[ methodName ] != FUNCTION &&
-		name != "document" )
-	{
+	}else if( typeof this[ methodName ] != FUNCTION && name != "document" ){
 		Warning( "no method override for", methodName, parameter )
 			.remind( "reusing parent method" )
 			.silence( )
@@ -483,9 +630,21 @@ Dendron.prototype.spawn = function spawn( ){
 	@end-method-documentation
 */
 Dendron.prototype.publish = function publish( ){
+	if( !this.engine ){
+		Fatal( "engine is not configured" );
+
+		return null;
+	}
+
 	var Engine = this[ this.engine ];
 
-	harden( this.engine, Engine );
+	if( !Engine ){
+		Fatal( "engine does not exists" );
+
+		return null;
+	}
+
+	harden( this.engine, Engine, global );
 
 	return Engine;
 };
@@ -495,14 +654,17 @@ Dendron.prototype.publish = function publish( ){
 		Default salt creation.
 	@end-method-documentation
 */
-Dendron.prototype.salt = function salt( ){
-	return U200b( fnord( [
-		0x0aaa, 0x0bbb, 0x0bbb, 0x0ccc, 0x0ddd,
-		0x0eee, 0x0fff, 0x0fad, 0x0bad, 0x0bed,
-		0x0fed, 0x0abe, 0xdead, 0xbeef, 0xdeaf,
-		0xcafe, 0xfeed, 0xfade, 0xbead, 0xdeed,
-		0xaaaa, 0xbbbb, 0xcccc, 0xdddd, 0xffff
-	] ) ).toString( );
+Dendron.prototype.sodium = function sodium( ){
+	var salt = cobralize( [ this.name, "salt" ].join( "-" ) );
+
+	return ( global[ salt ] ||
+		U200b( fnord( [
+			0x0aaa, 0x0bbb, 0x0bbb, 0x0ccc, 0x0ddd,
+			0x0eee, 0x0fff, 0x0fad, 0x0bad, 0x0bed,
+			0x0fed, 0x0abe, 0xdead, 0xbeef, 0xdeaf,
+			0xcafe, 0xfeed, 0xfade, 0xbead, 0xdeed,
+			0xaaaa, 0xbbbb, 0xcccc, 0xdddd, 0xffff
+		] ) ).toString( ) );
 };
 
 /*;
@@ -702,57 +864,23 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 
 	var salt = option.salt || this.salt;
 
-	var token = hash
-		.toString( )
-		.match( /\w{1,31}/g )
-		.map( function onEachToken( token ){
-			return parseInt( token, 16 );
-		} );
-
-	//: This will create a 12 character length stamp code.
-	var stamp = new hashid( salt, 0, [
-		"abcdefghijklmnopqrstuvwxyz",
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		"0123456789"
-	].join( "" ) ).encode( token );
-
-	if( stamp.length > 12 ){
-		stamp = stamp.substring( 0, 12 );
-
-	}else{
-		while( stamp.length != 12 ){
-			stamp += "0";
-		}
-	}
-
-	//: The number of repetition is defined by the index of the stamp.
-	var index = option.get( "index" );
-	stamp = _.compact( [ stamp, index ] ).join( "-" );
+	var stamp = tinge( {
+		"factor": option.factor,
+		"indexed": true
+	} );
 
 	option.set( "stamp", stamp );
 
-	//: This will create 6 character length short code.
-	var short = new hashid( salt, 0, [
-		"abcdefghijklmnopqrstuvwxyz",
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-		"0123456789",
-		"?!@$%#&*+=<>"
-	].join( "" ) )
-	.encode( hash
-		.toString( )
-		.match( /\w{1,63}/g )
-		.map( function onEachToken( token ){
-			return parseInt( token, 16 );
-		} ) );
-
-	if( short.length > 6 ){
-		short = short.substring( 0, 6 );
-
-	}else{
-		while( short.length != 6 ){
-			short += "0";
-		}
-	}
+	var short = tinge( {
+		"factor": option.factor,
+		"length": 6,
+		"dictionary": [
+			"abcdefghijklmnopqrstuvwxyz",
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+			"0123456789",
+			"?!@$%#&*+=<>"
+		].join( "" )
+	} );
 
 	option.set( "short", short );
 
