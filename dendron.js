@@ -120,13 +120,11 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 
 	optcall( this );
 
-	engine = optfor( arguments, FUNCTION ) ||
-		optfor( arguments, STRING );
+	engine = optfor( arguments, FUNCTION ) || optfor( arguments, STRING );
 
-	if( typeof engine == FUNCTION ||
-		typeof engine == STRING )
-	{
+	if( typeof engine == FUNCTION || typeof engine == STRING ){
 		var name = engine.name || ( ( typeof engine == STRING )? engine : "" );
+		name = shardize( name );
 
 		if( name in Dendron.registry ){
 			harden( "engine", name, this );
@@ -199,13 +197,19 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 		name = engine.name;
 	}
 
-	if( !name || typeof name != STRING ){
+	if( "name" in option && typeof option.name == "string" ){
+		name = option.name;
+	}
+
+	name = name || "document";
+
+	if( typeof name != STRING ){
 		Fatal( "invalid engine name", engine, option );
 
 		return this;
 	}
 
-	name = llamalize( name, true );
+	name = shardize( name );
 
 	if( name in Dendron.registry ){
 		Warning( "engine already created", name )
@@ -218,9 +222,16 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 		return this;
 	}
 
-	var Engine = diatom( name );
+	var alias = llamalize( name, true );
+	var label = llamalize( name );
+	var title = titlelize( name );
 
-	Engine.prototype.name = option.name || "document";
+	let Engine = diatom( alias );
+
+	Engine.prototype.name = name;
+	Engine.prototype.label = label;
+	Engine.prototype.title = title;
+	Engine.prototype.alias = alias;
 
 	Engine.prototype.salt = option.salt || this.sodium( );
 
@@ -319,11 +330,12 @@ Dendron.prototype.load = function load( option, callback ){
 		return this;
 	}
 
-	this.name = engine.name || this.name || shardize( this.constructor.name );
+	this.name = engine.name || this.name;
+	this.label = engine.label || this.label;
+	this.title = engine.title || this.title;
+	this.alias = engine.alias || this.alias;
 
-	this.title = engine.title || this.title || titlelize( this.name );
-
-	var mold = llamalize( [ this.title, "Mold" ].join( "-" ), true );
+	var mold = `${ this.alias }Mold`;
 	this.mold = engine.mold || global[ mold ];
 
 	if( ( !this.mold || _.isEmpty( this.mold ) ) &&
@@ -384,11 +396,11 @@ Dendron.prototype.load = function load( option, callback ){
 Dendron.prototype.data = function data( option ){
 	option = option || this.option;
 
-	var name = llamalize( this.name );
-
-	var entity = option.data || option[ name ] || { };
+	var entity = option.data || option[ this.label ] || { };
 
 	option.data = entity;
+
+	this.set( "data", entity );
 
 	return entity;
 };
@@ -408,11 +420,13 @@ Dendron.prototype.data = function data( option ){
 Dendron.prototype.list = function list( option ){
 	option = option || this.option;
 
-	var name = llamalize( this.name );
+	var label = this.label;
 
-	var array = option.list || ( doubt( option[ name ] ).ARRAY )? option[ name ] : [ ];
+	var array = option.list || ( doubt( option[ label ] ).ARRAY )? option[ label ] : [ ];
 
 	option.list = array;
+
+	this.set( "list", array );
 
 	return array;
 };
@@ -438,6 +452,8 @@ Dendron.prototype.factor = function factor( option ){
 			.map( ( function onEachFactor( point ){
 				return silph( data, point );
 			} ).bind( this ) );
+
+	this.set( "factor", option.factor );
 
 	return option.factor;
 };
@@ -507,7 +523,7 @@ Dendron.prototype.use = function use( method ){
 	}
 
 	if( !this.engine ){
-		Fatal( "engine is not configured" );
+		Fatal( "engine not configured" );
 
 		return this;
 	}
@@ -569,7 +585,7 @@ Dendron.prototype.method = function method( action, name ){
 		return this[ action ].bind( this );
 	}
 
-	name = name || this.name;
+	name = name || this.label;
 
 	var parameter = _( raze( arguments )
 		.concat( [ name ] )
@@ -588,12 +604,12 @@ Dendron.prototype.method = function method( action, name ){
 		return this[ methodName ].bind( this );
 
 	}else if( typeof this[ methodName ] != FUNCTION && name != "document" ){
-		Warning( "no method override for", methodName, parameter )
-			.remind( "reusing parent method" )
+		Warning( "no method override", methodName, parameter )
+			.remind( "reuse parent method" )
 			.silence( )
 			.prompt( );
 
-		action = parameter.replace( "-" + name, "" );
+		action = parameter.replace( `-${ name }`, "" );
 
 		return this.method.bind( this )( action, "document" );
 
@@ -655,7 +671,7 @@ Dendron.prototype.publish = function publish( ){
 	@end-method-documentation
 */
 Dendron.prototype.sodium = function sodium( ){
-	var salt = cobralize( [ this.name, "salt" ].join( "-" ) );
+	var salt = cobralize( `${ this.name }-salt` );
 
 	return ( global[ salt ] ||
 		U200b( fnord( [
@@ -891,6 +907,37 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 	callback( null, stamp, option );
 
 	return stamp;
+};
+
+/*;
+	@method-documentation:
+		Override instance option.
+	@end-method-documentation
+*/
+Dendron.prototype.set = function set( property, value ){
+	if( typeof arguments[ 0 ] == OBJECT ){
+		this.option = arguments[ 0 ];
+
+	}else if( property == "option" ){
+		this.option = value;
+
+	}else{
+		this.option[ property ] = value;
+	}
+
+	return this;
+};
+
+/*;
+	@method-documentation:
+		Attach immutable request, response to the engine instance.
+	@end-method-documentation
+*/
+Dendron.prototype.register = function register( request, response ){
+	harden( "request", request, this );
+	harden( "response", response, this );
+
+	return this;
 };
 
 heredito( Dendron, EventEmitter );
