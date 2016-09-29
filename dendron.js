@@ -406,16 +406,18 @@ Dendron.prototype.load = function load( option, callback ){
 		}
 	@end-option
 */
-Dendron.prototype.data = function data( option ){
+Dendron.prototype.resolveData = function resolveData( option ){
 	option = option || this.option;
 
 	var entity = option.data || option[ this.label ] || { };
 
-	option.data = entity;
+	if( !doubt( entity ).ARRAY ){
+		option.data = entity;
 
-	this.set( "data", entity );
+		this.set( "data", entity );
+	}
 
-	return entity;
+	return this;
 };
 
 /*;
@@ -430,18 +432,20 @@ Dendron.prototype.data = function data( option ){
 		}
 	@end-option
 */
-Dendron.prototype.list = function list( option ){
+Dendron.prototype.resolveList = function resolveList( option ){
 	option = option || this.option;
 
 	var label = this.label;
 
-	var array = option.list || ( doubt( option[ label ] ).ARRAY )? option[ label ] : [ ];
+	var array = option.list || option[ label ] || [ ];
 
-	option.list = array;
+	if( doubt( array ).ARRAY ){
+		option.list = array;
 
-	this.set( "list", array );
+		this.set( "list", array );
+	}
 
-	return array;
+	return this;
 };
 
 /*;
@@ -455,20 +459,109 @@ Dendron.prototype.list = function list( option ){
 		}
 	@end-option
 */
-Dendron.prototype.factor = function factor( option ){
+Dendron.prototype.resolveFactor = function resolveFactor( option ){
 	option = option || this.option;
 
-	var data = loosen( this.data( option ) );
+	this.resolveData( option );
 
-	option.factor = option.factor ||
-		Object.keys( this.mold.factor )
+	var data = loosen( option.data );
+
+	var factor = ( option.factor.length && option.factor ) ||
+		Object.keys( ( this.mold && this.mold.factor ) || { } )
 			.map( ( function onEachFactor( point ){
+				if( point == "model" ){
+					return this.name;
+				}
+
 				return silph( data, point );
 			} ).bind( this ) );
 
-	this.set( "factor", option.factor );
+	factor = factor
+		.filter( function onEachFactor( point ){
+			return ( typeof point != UNDEFINED &&
+				point !== null &&
+				point !== "" &&
+				!isNaN( point ) );
+		} );
+
+	if( doubt( factor ).ARRAY && factor.length ){
+		option.factor = factor;
+
+		this.set( "factor", factor );
+	}
 
 	return option.factor;
+};
+
+/*;
+	@method-documentation:
+		Extract and format element from option.
+	@end-method-documentation
+
+	@option:
+		{
+			"data:required": "object",
+		}
+	@end-option
+*/
+Dendron.prototype.resolveElement = function resolveElement( option ){
+	option = option || this.option;
+
+	var element = [ ];
+	for( let property in option.data ){
+		let data = option.data[ property ];
+
+		if( doubt( data ).ARRAY ){
+			data.forEach( function onEachElement( item ){
+				var type = typeof item;
+
+				if( type == OBJECT ){
+					element.push( {
+						"type": type,
+						"property": property,
+						"value": item
+					} );
+
+				}else{
+					element.push( {
+						"type": type,
+						"property": property,
+						"value": item,
+
+						"reference": item.reference,
+						"name": item.name,
+					} );
+				}
+			} );
+
+			delete option.data[ property ];
+		}
+	}
+
+	if( element.length ){
+		option.element = element;
+
+		this.set( "element", option.element );
+	}
+
+	return this;
+};
+
+Dendron.prototype.restrictData = function restrictData( option ){
+	option = option || this.option;
+
+	if( this.mold &&
+		this.mold.restrict &&
+		typeof this.mold.restrict == FUNCTION )
+	{
+		this.resolveData( option );
+
+		option.data = this.mold.restrict( option.data );
+
+		this.set( "data", option.data );
+	}
+
+	return this;
 };
 
 /*;
