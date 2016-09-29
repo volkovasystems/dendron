@@ -65,6 +65,7 @@
 			"raze": "raze",
 			"shardize": "shardize",
 			"silph": "silph",
+			"snapd": "snapd",
 			"symbiote": "symbiote",
 			"Olivant": "olivant",
 			"optcall": "optcall",
@@ -90,11 +91,14 @@ var harden = require( "harden" );
 var hashid = require( "hashids" );
 var heredito = require( "heredito" );
 var llamalize = require( "llamalize" );
+var loosen = require( "loosen" );
 var Olivant = require( "olivant" );
 var optcall = require( "optcall" );
 var optfor = require( "optfor" );
 var raze = require( "raze" );
 var shardize = require( "shardize" );
+var silph = require( "silph" );
+var snapd = require( "snapd" );
 var symbiote = require( "symbiote" );
 var tinge = require( "tinge" );
 var titlelize = require( "titlelize" );
@@ -347,6 +351,15 @@ Dendron.prototype.load = function load( option, callback ){
 
 		return this;
 	}
+
+	snapd.bind( this )
+		( function bindEngine( ){
+			if( this.mold.attachEngine &&
+				typeof this.mold.attachEngine == FUNCTION )
+			{
+				this.mold.attachEngine( this );
+			}
+		} );
 
 	this.model = this.mold.model || engine.model;
 
@@ -878,7 +891,7 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 
 	var hash = this.root( 1 ).createHash( option );
 
-	var salt = option.salt || this.salt;
+	var salt = option.get( "salt" ) || option.salt || this.salt;
 
 	var stamp = tinge( {
 		"factor": option.factor,
