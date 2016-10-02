@@ -519,7 +519,9 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 					element.push( {
 						"type": type,
 						"property": property,
-						"value": item
+						"value": item,
+
+						"name": property
 					} );
 
 				}else{
@@ -533,8 +535,6 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 					} );
 				}
 			} );
-
-			delete option.data[ property ];
 		}
 	}
 
@@ -542,6 +542,36 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 		option.element = element;
 
 		this.set( "element", option.element );
+	}
+
+	return this;
+};
+
+Dendron.prototype.resolveArray = function resolveArray( option ){
+	option = option || this.option;
+
+	var array = { };
+	for( let property in option.data ){
+		let data = option.data[ property ];
+
+		if( doubt( data ).ARRAY ){
+			data.forEach( function onEachArray( item ){
+				var type = typeof item;
+
+				if( type != OBJECT ){
+					array[ property ] = array[ property ] || [ ];
+					array[ property ].property = property;
+
+					array[ property ].push( item );
+				}
+			} );
+		}
+	}
+
+	if( !_.isEmpty( array ) ){
+		option.array = array;
+
+		this.set( "array", option.array );
 	}
 
 	return this;

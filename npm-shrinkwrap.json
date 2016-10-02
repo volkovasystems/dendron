@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -509,25 +509,34 @@
       }
     },
     "optcall": {
-      "version": "0.2.8",
+      "version": "0.2.10",
       "from": "optcall@latest",
       "dependencies": {
         "async": {
           "version": "2.0.1",
-          "from": "async@>=2.0.1 <3.0.0",
-          "resolved": "https://registry.npmjs.org/async/-/async-2.0.1.tgz"
+          "from": "https://registry.npmjs.org/async/-/async-2.0.1.tgz",
+          "resolved": "https://registry.npmjs.org/async/-/async-2.0.1.tgz",
+          "dependencies": {
+            "lodash": {
+              "version": "4.16.1",
+              "from": "https://registry.npmjs.org/lodash/-/lodash-4.16.1.tgz",
+              "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.1.tgz"
+            }
+          }
         },
         "glucose": {
-          "version": "0.1.1",
-          "from": "glucose@>=0.1.0 <0.2.0",
+          "version": "0.1.3",
+          "from": "glucose@0.1.3",
           "dependencies": {
             "zelf": {
               "version": "0.0.4",
-              "from": "zelf@0.0.4",
+              "from": "https://registry.npmjs.org/zelf/-/zelf-0.0.4.tgz",
+              "resolved": "https://registry.npmjs.org/zelf/-/zelf-0.0.4.tgz",
               "dependencies": {
                 "asea": {
                   "version": "0.1.2",
-                  "from": "asea@>=0.1.2 <0.2.0"
+                  "from": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz",
+                  "resolved": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz"
                 }
               }
             }
