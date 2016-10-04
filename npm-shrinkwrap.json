@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -509,7 +509,7 @@
       }
     },
     "optcall": {
-      "version": "0.2.10",
+      "version": "0.2.11",
       "from": "optcall@latest",
       "dependencies": {
         "async": {
