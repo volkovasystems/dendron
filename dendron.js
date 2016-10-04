@@ -411,7 +411,9 @@ Dendron.prototype.resolveData = function resolveData( option ){
 
 	var entity = option.data || option[ this.label ] || { };
 
-	if( !doubt( entity ).ARRAY ){
+	if( !doubt( entity ).ARRAY &&
+		!_.isEmpty( entity ) )
+	{
 		option.data = entity;
 
 		this.set( "data", entity );
@@ -439,7 +441,9 @@ Dendron.prototype.resolveList = function resolveList( option ){
 
 	var array = option.list || option[ label ] || [ ];
 
-	if( doubt( array ).ARRAY ){
+	if( doubt( array ).ARRAY &&
+		!_.isEmpty( array ) )
+	{
 		option.list = array;
 
 		this.set( "list", array );
@@ -465,6 +469,8 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 	this.resolveData( option );
 
 	var data = loosen( option.data );
+
+	option.factor = option.factor || [ ];
 
 	var factor = ( option.factor.length && option.factor ) ||
 		Object.keys( ( this.mold && this.mold.factor ) || { } )
