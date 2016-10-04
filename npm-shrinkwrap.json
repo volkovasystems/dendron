@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -304,7 +304,7 @@
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.16.2.tgz"
     },
     "loosen": {
-      "version": "0.0.3",
+      "version": "0.0.4",
       "from": "loosen@latest"
     },
     "node-uuid": {
@@ -576,7 +576,7 @@
       }
     },
     "silph": {
-      "version": "0.0.3",
+      "version": "0.0.4",
       "from": "silph@latest",
       "dependencies": {
         "budge": {
@@ -590,10 +590,12 @@
             "zelf": {
               "version": "0.0.4",
               "from": "zelf@0.0.4",
+              "resolved": "https://registry.npmjs.org/zelf/-/zelf-0.0.4.tgz",
               "dependencies": {
                 "asea": {
                   "version": "0.1.2",
-                  "from": "asea@>=0.1.2 <0.2.0"
+                  "from": "asea@>=0.1.2 <0.2.0",
+                  "resolved": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz"
                 }
               }
             }
@@ -605,7 +607,8 @@
           "dependencies": {
             "asea": {
               "version": "0.1.2",
-              "from": "asea@>=0.1.2 <0.2.0"
+              "from": "asea@>=0.1.2 <0.2.0",
+              "resolved": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz"
             },
             "decrease": {
               "version": "0.0.3",
