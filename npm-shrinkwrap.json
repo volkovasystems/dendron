@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -245,7 +245,7 @@
       "from": "doubt@latest"
     },
     "fnord": {
-      "version": "0.0.4",
+      "version": "0.0.5",
       "from": "fnord@latest",
       "dependencies": {
         "plough": {
@@ -254,7 +254,8 @@
           "dependencies": {
             "asea": {
               "version": "0.1.2",
-              "from": "asea@>=0.1.2 <0.2.0"
+              "from": "asea@>=0.1.2 <0.2.0",
+              "resolved": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz"
             },
             "decrease": {
               "version": "0.0.3",

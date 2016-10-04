@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Internal and external core, inter- and extra- communication procedures separated from myelin.",
   "main": "dendron.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "cobralize": "^0.1.2",
     "diatom": "^0.2.4",
     "doubt": "0.0.4",
-    "fnord": "0.0.4",
+    "fnord": "0.0.5",
     "harden": "^0.3.5",
     "hashids": "^1.1.1",
     "heredito": "^0.8.0",
