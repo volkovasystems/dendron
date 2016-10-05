@@ -284,6 +284,8 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	Engine.prototype.rootEngine = rootEngine;
 
+	optcall( Engine );
+
 	return this;
 };
 
