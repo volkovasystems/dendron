@@ -122,6 +122,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 		@end-meta-configuration
 	*/
 
+	//: Trying to wrap optcall during initalization.
 	optcall( this );
 
 	engine = optfor( arguments, FUNCTION ) || optfor( arguments, STRING );
@@ -264,6 +265,9 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	}
 
 	heredito( Engine, this.constructor );
+
+	//: Wrap in optcall before symbiosis.
+	optcall( Engine );
 
 	Engine = symbiote( Engine, this.constructor );
 
