@@ -267,6 +267,9 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	Engine = symbiote( Engine, this.constructor );
 
+	//: Wrap in optcall after symbiosis.
+	optcall( Engine );
+
 	//: Register the engine to the Dendron registry.
 	harden( name, Engine, Dendron.registry );
 
@@ -283,8 +286,6 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	harden( "engine", rootEngine, Engine );
 
 	Engine.prototype.rootEngine = rootEngine;
-
-	optcall( Engine );
 
 	return this;
 };
