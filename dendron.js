@@ -810,7 +810,7 @@ Dendron.prototype.publish = function publish( ){
 		return null;
 	}
 
-	harden( this.label, Engine, global );
+	harden( this.alias, Engine, global );
 
 	return Engine;
 };
