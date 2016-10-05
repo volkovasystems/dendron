@@ -214,6 +214,7 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	}
 
 	name = shardize( name );
+	this.name = name;
 
 	if( name in Dendron.registry ){
 		Warning( "engine already created", name )
@@ -226,9 +227,14 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 		return this;
 	}
 
-	var alias = llamalize( name, true );
-	var label = llamalize( name );
-	var title = titlelize( name );
+	let alias = llamalize( name, true );
+	this.alias = alias;
+
+	let label = llamalize( name );
+	this.label = label;
+
+	let title = titlelize( name );
+	this.title = title;
 
 	let Engine = diatom( alias );
 
@@ -802,7 +808,7 @@ Dendron.prototype.publish = function publish( ){
 		return null;
 	}
 
-	harden( this.engine, Engine, global );
+	harden( this.label, Engine, global );
 
 	return Engine;
 };
