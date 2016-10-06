@@ -131,7 +131,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 	engine = optfor( arguments, FUNCTION ) || optfor( arguments, STRING );
 
 	if( typeof engine == FUNCTION || typeof engine == STRING ){
-		var name = engine.name || ( ( typeof engine == STRING )? engine : "" );
+		let name = engine.name || ( ( typeof engine == STRING )? engine : "" );
 		name = shardize( name );
 
 		if( name in Dendron.registry ){
@@ -157,7 +157,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 			this.load( option );
 
 		}else{
-			var engine = this.rootEngine;
+			let engine = this.rootEngine;
 
 			option = arguments[ 0 ];
 
@@ -200,7 +200,7 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	option = option || { };
 
-	var name = engine;
+	let name = engine;
 	if( typeof engine == FUNCTION ){
 		name = engine.name;
 	}
@@ -281,10 +281,15 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	harden( "engine", name, this );
 	harden( name, Engine, this );
 
-	var rootEngine = Engine( {
+	let mold = `${ this.alias }Mold`;
+	mold = option.mold || global[ mold ];
+
+	let model = option.model || mold.model;
+
+	let rootEngine = Engine( {
 		"engine": {
-			"mold": option.mold,
-			"model": option.model
+			"mold": mold,
+			"model": model
 		}
 	} );
 	harden( "engine", rootEngine, Engine );
@@ -329,7 +334,7 @@ Dendron.prototype.load = function load( option, callback ){
 		@end-meta-configuration
 	*/
 
-	var engine = option.engine || option;
+	let engine = option.engine || option;
 
 	if( !engine ){
 		Fatal( "no engine given", engine )
@@ -352,8 +357,10 @@ Dendron.prototype.load = function load( option, callback ){
 	this.title = engine.title || this.title;
 	this.alias = engine.alias || this.alias;
 
-	var mold = `${ this.alias }Mold`;
-	this.mold = engine.mold || global[ mold ];
+	let rootEngine = this.rootEngine;
+
+	let mold = `${ this.alias }Mold`;
+	this.mold = engine.mold || rootEngine.mold || global[ mold ];
 
 	if( ( !this.mold || _.isEmpty( this.mold ) ) &&
 		( !engine.model || _.isEmpty( engine.model ) ) )
@@ -422,7 +429,14 @@ Dendron.prototype.load = function load( option, callback ){
 Dendron.prototype.resolveData = function resolveData( option ){
 	option = option || this.option;
 
-	var entity = option.data || option[ this.label ] || { };
+	let entity = option.data;
+	if( _.isEmpty( entity ) ){
+		entity = option[ this.label ];
+	}
+
+	if( _.isEmpty( entity ) ){
+		entity = { };
+	}
 
 	if( !doubt( entity ).ARRAY &&
 		!_.isEmpty( entity ) )
@@ -450,9 +464,14 @@ Dendron.prototype.resolveData = function resolveData( option ){
 Dendron.prototype.resolveList = function resolveList( option ){
 	option = option || this.option;
 
-	var label = this.label;
+	let array = option.list;
+	if( _.isEmpty( array ) ){
+		array = option[ this.label ];
+	}
 
-	var array = option.list || option[ label ] || [ ];
+	if( _.isEmpty( array ) ){
+		array = [ ];
+	}
 
 	if( doubt( array ).ARRAY &&
 		!_.isEmpty( array ) )
@@ -481,11 +500,11 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 
 	this.resolveData( option );
 
-	var data = loosen( option.data );
+	let data = loosen( option.data );
 
 	option.factor = option.factor || [ ];
 
-	var factor = ( option.factor.length && option.factor ) ||
+	let factor = ( option.factor.length && option.factor ) ||
 		Object.keys( ( this.mold && this.mold.factor ) || { } )
 			.map( ( function onEachFactor( point ){
 				if( point == "model" ){
@@ -526,13 +545,13 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 Dendron.prototype.resolveElement = function resolveElement( option ){
 	option = option || this.option;
 
-	var element = [ ];
+	let element = [ ];
 	for( let property in option.data ){
 		let data = option.data[ property ];
 
 		if( doubt( data ).ARRAY ){
 			data.forEach( function onEachElement( item ){
-				var type = typeof item;
+				let type = typeof item;
 
 				if( type == OBJECT ){
 					element.push( {
@@ -569,13 +588,13 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 Dendron.prototype.resolveArray = function resolveArray( option ){
 	option = option || this.option;
 
-	var array = { };
+	let array = { };
 	for( let property in option.data ){
 		let data = option.data[ property ];
 
 		if( doubt( data ).ARRAY ){
 			data.forEach( function onEachArray( item ){
-				var type = typeof item;
+				let type = typeof item;
 
 				if( type != OBJECT ){
 					array[ property ] = array[ property ] || [ ];
