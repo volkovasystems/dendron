@@ -267,6 +267,9 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 		}
 	}
 
+	//: We need to do this to ensure that there mutual initialization.
+	symbiote( this.constructor );
+
 	heredito( Engine, this.constructor );
 
 	//: Wrap in optcall before symbiosis.
@@ -282,9 +285,9 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	harden( name, Engine, this );
 
 	let mold = `${ this.alias }Mold`;
-	mold = option.mold || global[ mold ];
+	mold = option.mold || global[ mold ] || { };
 
-	let model = option.model || mold.model;
+	let model = option.model || mold.model || { };
 
 	let rootEngine = Engine( {
 		"engine": {
