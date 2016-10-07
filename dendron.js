@@ -165,6 +165,11 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 
 			this.load( option );
 		}
+
+	}else if( this.rootEngine ){
+		let option = { "engine": this.rootEngine };
+
+		this.load( option );
 	}
 
 	return this;
@@ -277,13 +282,6 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	Engine = symbiote( Engine, this.constructor );
 
-	//: Register the engine to the Dendron registry.
-	harden( name, Engine, Dendron.registry );
-
-	//: Do not be confused on this.
-	harden( "engine", name, this );
-	harden( name, Engine, this );
-
 	let mold = `${ this.alias }Mold`;
 	mold = option.mold || global[ mold ] || { };
 
@@ -295,9 +293,16 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 			"model": model
 		}
 	} );
+	Engine.prototype.rootEngine = rootEngine;
+
 	harden( "engine", rootEngine, Engine );
 
-	Engine.prototype.rootEngine = rootEngine;
+	//: Register the engine to the Dendron registry.
+	harden( name, Engine, Dendron.registry );
+
+	//: Do not be confused on this.
+	harden( "engine", name, this );
+	harden( name, Engine, this );
 
 	return this;
 };

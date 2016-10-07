@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -313,7 +313,7 @@
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.7.tgz"
     },
     "olivant": {
-      "version": "0.7.22",
+      "version": "0.8.0",
       "from": "olivant@latest",
       "dependencies": {
         "asea": {
@@ -513,7 +513,7 @@
       }
     },
     "optcall": {
-      "version": "0.3.1",
+      "version": "0.3.2",
       "from": "optcall@latest",
       "dependencies": {
         "async": {
