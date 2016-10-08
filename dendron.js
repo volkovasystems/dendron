@@ -263,24 +263,18 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	ate( "name", "initialize", Engine.prototype.initialize );
 
 	if( typeof engine == "function" ){
-		var engineProperty = Object.getOwnPropertyNames( engine.prototype );
-		var enginePropertyLength = engineProperty.length;
-		for( let index = 0; index < enginePropertyLength; index++ ){
-			var property = engineProperty[ index ];
-
+		let engineProperty = Object.getOwnPropertyNames( engine.prototype );
+		engineProperty.forEach( function onEachProperty( property ){
 			Engine.prototype[ property ] = engine.prototype[ property ];
-		}
+		} );
 	}
-
-	//: We need to do this to ensure that there mutual initialization.
-	symbiote( this.constructor );
 
 	heredito( Engine, this.constructor );
 
 	//: Wrap in optcall before symbiosis.
 	optcall( Engine );
 
-	Engine = symbiote( Engine, this.constructor );
+	symbiote( Engine );
 
 	let mold = `${ this.alias }Mold`;
 	mold = option.mold || global[ mold ] || { };
@@ -293,6 +287,8 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 			"model": model
 		}
 	} );
+	rootEngine.rootEngine = rootEngine;
+
 	Engine.prototype.rootEngine = rootEngine;
 
 	harden( "engine", rootEngine, Engine );
@@ -365,7 +361,8 @@ Dendron.prototype.load = function load( option, callback ){
 	this.title = engine.title || this.title;
 	this.alias = engine.alias || this.alias;
 
-	let rootEngine = this.rootEngine;
+	let rootEngine = this.rootEngine || this;
+	this.rootEngine = rootEngine;
 
 	let mold = `${ this.alias }Mold`;
 	this.mold = engine.mold || rootEngine.mold || global[ mold ];
@@ -380,9 +377,11 @@ Dendron.prototype.load = function load( option, callback ){
 		return this;
 	}
 
+	//: We cannot attach the engine to mold if it is not existing.
 	snapd.bind( this )
 		( function bindEngine( ){
-			if( this.mold.attachEngine &&
+			if( this.rootEngine &&
+				this.mold.attachEngine &&
 				typeof this.mold.attachEngine == FUNCTION )
 			{
 				this.mold.attachEngine( this );
@@ -710,10 +709,10 @@ Dendron.prototype.use = function use( method ){
 		return this;
 	}
 
-	var property = method.name;
+	let property = method.name;
 	method = optcall.wrap( method );
 
-	var Engine = this[ this.engine ];
+	let Engine = this[ this.engine ];
 
 	if( !Engine ){
 		Fatal( "engine does not exists" );
@@ -723,7 +722,7 @@ Dendron.prototype.use = function use( method ){
 
 	Engine.prototype[ property ] = method;
 
-	var rootEngine = Engine.engine;
+	let rootEngine = Engine.engine;
 
 	if( !rootEngine ){
 		Fatal( "root engine not created" );
@@ -769,7 +768,7 @@ Dendron.prototype.method = function method( action, name ){
 
 	name = name || this.label;
 
-	var parameter = _( raze( arguments )
+	let parameter = _( raze( arguments )
 		.concat( [ name ] )
 		.map( function onEachParameter( parameter ){
 			return shardize( parameter ).split( "-" );
@@ -780,7 +779,7 @@ Dendron.prototype.method = function method( action, name ){
 		.value( )
 		.join( "-" );
 
-	var methodName = llamalize( parameter );
+	let methodName = llamalize( parameter );
 
 	if( typeof this[ methodName ] == FUNCTION ){
 		return this[ methodName ].bind( this );
@@ -834,7 +833,7 @@ Dendron.prototype.publish = function publish( ){
 		return null;
 	}
 
-	var Engine = this[ this.engine ];
+	let Engine = this[ this.engine ];
 
 	if( !Engine ){
 		Fatal( "engine does not exists" );
@@ -853,7 +852,7 @@ Dendron.prototype.publish = function publish( ){
 	@end-method-documentation
 */
 Dendron.prototype.sodium = function sodium( ){
-	var salt = cobralize( `${ this.name }-salt` );
+	let salt = cobralize( `${ this.name }-salt` );
 
 	return ( global[ salt ] ||
 		U200b( fnord( [
@@ -915,14 +914,14 @@ Dendron.prototype.createHash = function createHash( option, callback ){
 	}
 
 	//: Preserve the reference of the array.
-	var factor = [ ].concat( option.factor );
+	let factor = [ ].concat( option.factor );
 
 	//: Hash uniqueness factor to differentiate from other models.
 	if( this.difference ){
 		factor.push( this.difference );
 	}
 
-	var hash = crypto.createHash( "sha512" );
+	let hash = crypto.createHash( "sha512" );
 
 	hash.update( JSON.stringify( _.compact( factor ) ) );
 
@@ -988,13 +987,13 @@ Dendron.prototype.createReference = function createReference( option, callback )
 	}
 
 	//: Preserve the reference of array.
-	var factor = [ ].concat( option.factor );
+	let factor = [ ].concat( option.factor );
 
 	factor.push( uuid.v1( ) );
 
 	factor.push( uuid.v4( ) );
 
-	var reference = this.root( 1 ).createHash( { "factor": factor } );
+	let reference = this.root( 1 ).createHash( { "factor": factor } );
 
 	option.set( "reference", reference );
 
@@ -1058,18 +1057,18 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 		return null;
 	}
 
-	var hash = this.root( 1 ).createHash( option );
+	let hash = this.root( 1 ).createHash( option );
 
-	var salt = option.get( "salt" ) || option.salt || this.salt;
+	let salt = option.get( "salt" ) || option.salt || this.salt;
 
-	var stamp = tinge( {
+	let stamp = tinge( {
 		"factor": option.factor,
 		"indexed": true
 	} );
 
 	option.set( "stamp", stamp );
 
-	var short = tinge( {
+	let short = tinge( {
 		"factor": option.factor,
 		"length": 6,
 		"dictionary": [
