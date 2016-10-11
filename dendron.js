@@ -566,7 +566,8 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 						"property": property,
 						"value": item,
 
-						"name": property
+						"reference": item.reference,
+						"name": item.name,
 					} );
 
 				}else{
@@ -575,8 +576,7 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 						"property": property,
 						"value": item,
 
-						"reference": item.reference,
-						"name": item.name,
+						"name": property
 					} );
 				}
 			} );

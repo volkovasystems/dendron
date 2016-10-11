@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
