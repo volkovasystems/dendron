@@ -44,6 +44,8 @@
 	@module-documentation:
 		Internal and external core, inter- and extra- communication
 			procedures separated from myelin.
+
+		Engine references are immutable when it operates on a single document.
 	@end-module-documentation
 
 	@include:
@@ -378,15 +380,24 @@ Dendron.prototype.load = function load( option, callback ){
 	}
 
 	//: We cannot attach the engine to mold if it is not existing.
-	snapd.bind( this )
-		( function bindEngine( ){
-			if( this.rootEngine &&
-				this.mold.attachEngine &&
-				typeof this.mold.attachEngine == FUNCTION )
-			{
-				this.mold.attachEngine( this );
-			}
-		} );
+	if( !this.mold.engine && !this.mold.rootEngine ){
+		snapd.bind( this )
+			( function bindEngine( ){
+				if( this.rootEngine &&
+					this.mold.attachEngine &&
+					typeof this.mold.attachEngine == FUNCTION )
+				{
+					this.mold.attachEngine( this );
+
+				}else{
+					Warning( "cannot attach engine to mold", this )
+						.prompt( );
+				}
+			} );
+
+	}else{
+		Prompt( "engine and root engine already attached", this );
+	}
 
 	this.model = this.mold.model || engine.model;
 
@@ -929,8 +940,9 @@ Dendron.prototype.createHash = function createHash( option, callback ){
 
 	option.set( "hash", hash );
 
-	option.identity = option.identity || { };
-	option.identity.hash = hash;
+	if( !option.identity.hash ){
+		harden( "hash", hash, option.identity );
+	}
 
 	callback( null, hash, option );
 
@@ -986,6 +998,14 @@ Dendron.prototype.createReference = function createReference( option, callback )
 		return null;
 	}
 
+	if( option.identity.reference ){
+		Prompt( "reference exists", option )
+			.remind( "return existing reference" )
+			.pass( callback, option.identity.reference, option );
+
+		return option.identity.reference;
+	}
+
 	//: Preserve the reference of array.
 	let factor = [ ].concat( option.factor );
 
@@ -995,10 +1015,15 @@ Dendron.prototype.createReference = function createReference( option, callback )
 
 	let reference = this.root( 1 ).createHash( { "factor": factor } );
 
+	factor.pop( );
+
+	factor.pop( );
+
 	option.set( "reference", reference );
 
-	option.identity = option.identity || { };
-	option.identity.reference = reference;
+	if( !option.identity.reference ){
+		harden( "reference", reference, option.identity );
+	}
 
 	callback( null, reference, option );
 
@@ -1081,7 +1106,6 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 
 	option.set( "short", short );
 
-	option.identity = option.identity || { };
 	option.identity.stamp = stamp;
 	option.identity.short = short;
 
