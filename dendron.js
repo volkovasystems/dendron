@@ -534,10 +534,13 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 
 	factor = factor
 		.filter( function onEachFactor( point ){
+			if( typeof point == NUMBER && !isNaN( point ) ){
+				return true;
+			}
+
 			return ( typeof point != UNDEFINED &&
 				point !== null &&
-				point !== "" &&
-				!isNaN( point ) );
+				point !== "" );
 		} );
 
 	if( doubt( factor ).ARRAY && factor.length ){
