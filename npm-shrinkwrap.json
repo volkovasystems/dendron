@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -297,7 +297,7 @@
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.7.tgz"
     },
     "olivant": {
-      "version": "0.8.3",
+      "version": "0.8.4",
       "from": "olivant@latest",
       "dependencies": {
         "asea": {
@@ -387,8 +387,8 @@
           }
         },
         "glucose": {
-          "version": "0.2.0",
-          "from": "glucose@0.2.0",
+          "version": "0.2.1",
+          "from": "glucose@0.2.1",
           "dependencies": {
             "zelf": {
               "version": "0.0.4",
@@ -486,7 +486,7 @@
       }
     },
     "optcall": {
-      "version": "0.3.4",
+      "version": "0.4.0",
       "from": "optcall@latest",
       "dependencies": {
         "async": {
@@ -502,8 +502,8 @@
           }
         },
         "glucose": {
-          "version": "0.2.0",
-          "from": "glucose@0.2.0",
+          "version": "0.2.1",
+          "from": "glucose@0.2.1",
           "dependencies": {
             "zelf": {
               "version": "0.0.4",
