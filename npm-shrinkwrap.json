@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "dependencies": {
     "ate": {
       "version": "0.0.0",
@@ -532,6 +532,24 @@
             "asea": {
               "version": "0.1.2",
               "from": "asea@>=0.1.2 <0.2.0"
+            }
+          }
+        }
+      }
+    },
+    "petrifi": {
+      "version": "0.0.0",
+      "from": "petrifi@latest",
+      "dependencies": {
+        "zelf": {
+          "version": "0.0.4",
+          "from": "https://registry.npmjs.org/zelf/-/zelf-0.0.4.tgz",
+          "resolved": "https://registry.npmjs.org/zelf/-/zelf-0.0.4.tgz",
+          "dependencies": {
+            "asea": {
+              "version": "0.1.2",
+              "from": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz",
+              "resolved": "https://registry.npmjs.org/asea/-/asea-0.1.2.tgz"
             }
           }
         }

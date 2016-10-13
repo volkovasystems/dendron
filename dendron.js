@@ -64,14 +64,15 @@
 			"heredito": "heredito",
 			"llamalize": "llamalize",
 			"loosen": "loosen",
+			"Olivant": "olivant",
+			"optcall": "optcall",
+			"optfor": "optfor",
+			"petrifi": "petrifi",
 			"raze": "raze",
 			"shardize": "shardize",
 			"silph": "silph",
 			"snapd": "snapd",
 			"symbiote": "symbiote",
-			"Olivant": "olivant",
-			"optcall": "optcall",
-			"optfor": "optfor",
 			"tinge": "tinge",
 			"titlelize": "titlelize",
 			"U200b": "u200b",
@@ -97,6 +98,7 @@ var loosen = require( "loosen" );
 var Olivant = require( "olivant" );
 var optcall = require( "optcall" );
 var optfor = require( "optfor" );
+var petrifi = require( "petrifi" );
 var raze = require( "raze" );
 var shardize = require( "shardize" );
 var silph = require( "silph" );
@@ -944,7 +946,7 @@ Dendron.prototype.createHash = function createHash( option, callback ){
 	option.set( "hash", hash );
 
 	if( !option.identity.hash ){
-		harden( "hash", hash, option.identity );
+		petrifi( "hash", hash, option.identity );
 	}
 
 	callback( null, hash, option );
@@ -1025,7 +1027,7 @@ Dendron.prototype.createReference = function createReference( option, callback )
 	option.set( "reference", reference );
 
 	if( !option.identity.reference ){
-		harden( "reference", reference, option.identity );
+		petrifi( "reference", reference, option.identity );
 	}
 
 	callback( null, reference, option );
