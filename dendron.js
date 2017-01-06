@@ -92,7 +92,7 @@ const crypto = require( "crypto" );
 const diatom = require( "diatom" );
 const doubt = require( "doubt" );
 const EventEmitter = require( "events" );
-const falzy = require( "falzy" );
+const falze = require( "falze" );
 const fnord = require( "fnord" );
 const harden = require( "harden" );
 const hashid = require( "hashids" );
@@ -350,7 +350,7 @@ Dendron.prototype.load = function load( option, callback ){
 
 	let engine = option.engine || option;
 
-	if( falzy( engine ) ){
+	if( falze( engine ) ){
 		Fatal( "no engine given", engine )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -369,7 +369,7 @@ Dendron.prototype.load = function load( option, callback ){
 	let mold = `${ this.alias }Mold`;
 	this.mold = engine.mold || rootEngine.mold || global[ mold ];
 
-	if( falzy( this.mold ) && falzy( engine.model ) ) {
+	if( falze( this.mold ) && falze( engine.model ) ) {
 		Fatal( "empty mold", option )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -378,7 +378,7 @@ Dendron.prototype.load = function load( option, callback ){
 	}
 
 	//: We cannot attach the engine to mold if it is not existing.
-	if( falzy( this.mold.engine ) && falzy( this.mold.rootEngine ) ){
+	if( falze( this.mold.engine ) && falze( this.mold.rootEngine ) ){
 		snapd.bind( this )
 			( function bindEngine( ){
 				if( this.rootEngine &&
@@ -399,7 +399,7 @@ Dendron.prototype.load = function load( option, callback ){
 
 	this.model = this.mold.model || engine.model;
 
-	if( falzy( this.model ) ){
+	if( falze( this.model ) ){
 		Fatal( "empty model", option )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -417,7 +417,7 @@ Dendron.prototype.load = function load( option, callback ){
 		return this;
 	}
 
-	if( falzy( this.salt ) ){
+	if( falze( this.salt ) ){
 		Warning( "empty salt", option )
 			.remind( "data conflict may arise" )
 			.silence( )
@@ -714,7 +714,7 @@ Dendron.prototype.use = function use( method ){
 		return this;
 	}
 
-	if( falzy( this.engine ) ){
+	if( falze( this.engine ) ){
 		Fatal( "engine not configured" );
 
 		return this;
@@ -725,7 +725,7 @@ Dendron.prototype.use = function use( method ){
 
 	let Engine = this[ this.engine ];
 
-	if( falzy( Engine ) ){
+	if( falze( Engine ) ){
 		Fatal( "engine does not exists" );
 
 		return this;
@@ -735,7 +735,7 @@ Dendron.prototype.use = function use( method ){
 
 	let rootEngine = Engine.engine;
 
-	if( falzy( rootEngine ) ){
+	if( falze( rootEngine ) ){
 		Fatal( "root engine not created" );
 
 		return this;
@@ -838,7 +838,7 @@ Dendron.prototype.spawn = function spawn( ){
 	@end-method-documentation
 */
 Dendron.prototype.publish = function publish( ){
-	if( falzy( this.engine ) ){
+	if( falze( this.engine ) ){
 		Fatal( "engine is not configured" );
 
 		return null;
@@ -846,7 +846,7 @@ Dendron.prototype.publish = function publish( ){
 
 	let Engine = this[ this.engine ];
 
-	if( falzy( Engine ) ){
+	if( falze( Engine ) ){
 		Fatal( "engine does not exists" );
 
 		return null;
