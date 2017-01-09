@@ -5,7 +5,7 @@
 		The MIT License (MIT)
 		@mit-license
 
-		Copyright (@c) 2016 Richeve Siodina Bebedor
+		Copyright (@c) 2017 Richeve Siodina Bebedor
 		@email: richeve.bebedor@gmail.com
 
 		Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,6 +34,9 @@
 			"file": "dendron.js",
 			"module": "dendron",
 			"author": "Richeve S. Bebedor",
+			"contributors": [
+				"John Lenon Maghanoy <johnlenonmaghanoy@gmail.com>"
+			],
 			"eMail": "richeve.bebedor@gmail.com",
 			"repository": "https://github.com/volkovasystems/dendron.git",
 			"global": true,
@@ -81,35 +84,38 @@
 	@end-include
 */
 
-var _ = require( "lodash" );
-var ate = require( "ate" );
-var called = require( "called" );
-var cobralize = require( "cobralize" );
-var crypto = require( "crypto" );
-var diatom = require( "diatom" );
-var doubt = require( "doubt" );
-var EventEmitter = require( "events" );
-var fnord = require( "fnord" );
-var harden = require( "harden" );
-var hashid = require( "hashids" );
-var heredito = require( "heredito" );
-var llamalize = require( "llamalize" );
-var loosen = require( "loosen" );
-var Olivant = require( "olivant" );
-var optcall = require( "optcall" );
-var optfor = require( "optfor" );
-var petrifi = require( "petrifi" );
-var raze = require( "raze" );
-var shardize = require( "shardize" );
-var silph = require( "silph" );
-var snapd = require( "snapd" );
-var symbiote = require( "symbiote" );
-var tinge = require( "tinge" );
-var titlelize = require( "titlelize" );
-var U200b = require( "u200b" );
-var uuid = require( "node-uuid" );
+const _ = require( "lodash" );
+const ate = require( "ate" );
+const called = require( "called" );
+const cobralize = require( "cobralize" );
+const crypto = require( "crypto" );
+const diatom = require( "diatom" );
+const doubt = require( "doubt" );
+const EventEmitter = require( "events" );
+const falze = require( "falze" );
+const fnord = require( "fnord" );
+const harden = require( "harden" );
+const hashid = require( "hashids" );
+const heredito = require( "heredito" );
+const llamalize = require( "llamalize" );
+const loosen = require( "loosen" );
+const Olivant = require( "olivant" );
+const optcall = require( "optcall" );
+const optfor = require( "optfor" );
+const petrifi = require( "petrifi" );
+const protype = require( "protype" );
+const raze = require( "raze" );
+const shardize = require( "shardize" );
+const silph = require( "silph" );
+const snapd = require( "snapd" );
+const symbiote = require( "symbiote" );
+const tinge = require( "tinge" );
+const titlelize = require( "titlelize" );
+const truu = require( "truu" );
+const U200b = require( "u200b" );
+const uuid = require( "node-uuid" );
 
-var Dendron = diatom( "Dendron" );
+const Dendron = diatom( "Dendron" );
 
 harden( "registry", Dendron.registry || { }, Dendron );
 
@@ -134,8 +140,8 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 
 	engine = optfor( arguments, FUNCTION ) || optfor( arguments, STRING );
 
-	if( typeof engine == FUNCTION || typeof engine == STRING ){
-		let name = engine.name || ( ( typeof engine == STRING )? engine : "" );
+	if( protype( engine, FUNCTION ) || protype( engine, STRING ) ){
+		let name = engine.name || ( ( protype( engine, STRING ) )? engine : "" );
 		name = shardize( name );
 
 		if( name in Dendron.registry ){
@@ -154,7 +160,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 		}
 	}
 
-	if( typeof arguments[ 0 ] == OBJECT ){
+	if( protype( arguments[ 0 ], OBJECT ) ){
 		if( !this.rootEngine ){
 			option = arguments[ 0 ];
 
@@ -210,17 +216,17 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	option = option || { };
 
 	let name = engine;
-	if( typeof engine == FUNCTION ){
+	if( protype( engine, FUNCTION ) ){
 		name = engine.name;
 	}
 
-	if( "name" in option && typeof option.name == "string" ){
+	if( "name" in option && protype( option.name, STRING ) ){
 		name = option.name;
 	}
 
 	name = name || "document";
 
-	if( typeof name != STRING ){
+	if( !protype( name, STRING ) ){
 		Fatal( "invalid engine name", engine, option );
 
 		return this;
@@ -259,14 +265,14 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 	Engine.prototype.salt = option.salt || this.sodium( );
 
 	Engine.prototype.initialize = option.initialize ||
-		( typeof engine == FUNCTION && ( engine.prototype.initialize || engine ) ) ||
+		( protype( engine, FUNCTION ) && ( engine.prototype.initialize || engine ) ) ||
 		function initialize( option, callback ){
 			called.bind( this )( callback )( null, this, option );
 			return this;
 		};
 	ate( "name", "initialize", Engine.prototype.initialize );
 
-	if( typeof engine == "function" ){
+	if( protype( engine, FUNCTION ) ){
 		let engineProperty = Object.getOwnPropertyNames( engine.prototype );
 		engineProperty.forEach( function onEachProperty( property ){
 			Engine.prototype[ property ] = engine.prototype[ property ];
@@ -344,16 +350,8 @@ Dendron.prototype.load = function load( option, callback ){
 
 	let engine = option.engine || option;
 
-	if( !engine ){
+	if( falze( engine ) ){
 		Fatal( "no engine given", engine )
-			.remind( "cannot load engine" )
-			.pass( callback, null, option );
-
-		return this;
-	}
-
-	if( _.isEmpty( engine ) ){
-		Fatal( "empty engine", engine )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
 
@@ -371,9 +369,7 @@ Dendron.prototype.load = function load( option, callback ){
 	let mold = `${ this.alias }Mold`;
 	this.mold = engine.mold || rootEngine.mold || global[ mold ];
 
-	if( ( !this.mold || _.isEmpty( this.mold ) ) &&
-		( !engine.model || _.isEmpty( engine.model ) ) )
-	{
+	if( falze( this.mold ) && falze( engine.model ) ) {
 		Fatal( "empty mold", option )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -382,12 +378,12 @@ Dendron.prototype.load = function load( option, callback ){
 	}
 
 	//: We cannot attach the engine to mold if it is not existing.
-	if( !this.mold.engine && !this.mold.rootEngine ){
+	if( falze( this.mold.engine ) && falze( this.mold.rootEngine ) ){
 		snapd.bind( this )
 			( function bindEngine( ){
 				if( this.rootEngine &&
 					this.mold.attachEngine &&
-					typeof this.mold.attachEngine == FUNCTION )
+					protype( this.mold.attachEngine, FUNCTION ) )
 				{
 					this.mold.attachEngine( this );
 
@@ -403,7 +399,7 @@ Dendron.prototype.load = function load( option, callback ){
 
 	this.model = this.mold.model || engine.model;
 
-	if( !this.model || _.isEmpty( this.model ) ){
+	if( falze( this.model ) ){
 		Fatal( "empty model", option )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -413,7 +409,7 @@ Dendron.prototype.load = function load( option, callback ){
 
 	this.salt = engine.salt || this.salt || this.sodium( );
 
-	if( typeof this.salt != STRING ){
+	if( !protype( this.salt, STRING ) ){
 		Fatal( "invalid salt", option )
 			.remind( "cannot load engine" )
 			.pass( callback, null, option );
@@ -421,7 +417,7 @@ Dendron.prototype.load = function load( option, callback ){
 		return this;
 	}
 
-	if( !this.salt ){
+	if( falze( this.salt ) ){
 		Warning( "empty salt", option )
 			.remind( "data conflict may arise" )
 			.silence( )
@@ -536,12 +532,12 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 
 	factor = factor
 		.filter( function onEachFactor( point ){
-			if( typeof point == NUMBER && !isNaN( point ) ){
+			if( protype( point, NUMBER ) && !isNaN( point ) ){
 				return true;
 			}
 
-			return ( typeof point != UNDEFINED &&
-				point !== null &&
+			return ( !protype( point, UNDEFINED ) &&
+				!protype( point, NULL ) &&
 				point !== "" );
 		} );
 
@@ -574,9 +570,8 @@ Dendron.prototype.resolveElement = function resolveElement( option ){
 
 		if( doubt( data ).ARRAY ){
 			data.forEach( function onEachElement( item ){
-				let type = typeof item;
 
-				if( type == OBJECT ){
+				if( protype( item, OBJECT ) ){
 					element.push( {
 						"type": type,
 						"property": property,
@@ -617,19 +612,19 @@ Dendron.prototype.resolveArray = function resolveArray( option ){
 
 		if( doubt( data ).ARRAY ){
 			data.forEach( function onEachArray( item ){
-				let type = typeof item;
 
-				if( type != OBJECT ){
+				if( !protype( item, OBJECT ) ){
 					array[ property ] = array[ property ] || [ ];
 					array[ property ].property = property;
 
 					array[ property ].push( item );
 				}
+
 			} );
 		}
 	}
 
-	if( !_.isEmpty( array ) ){
+	if( truu( array ) ){
 		option.array = array;
 
 		this.set( "array", option.array );
@@ -641,9 +636,9 @@ Dendron.prototype.resolveArray = function resolveArray( option ){
 Dendron.prototype.restrictData = function restrictData( option ){
 	option = option || this.option;
 
-	if( this.mold &&
-		this.mold.restrict &&
-		typeof this.mold.restrict == FUNCTION )
+	if( truu( this.mold ) &&
+		truu( this.mold.restrict ) &&
+		protype( this.mold.restrict, FUNCTION ) )
 	{
 		this.resolveData( option );
 
@@ -663,7 +658,7 @@ Dendron.prototype.restrictData = function restrictData( option ){
 Dendron.prototype.mergeIdentity = function mergeIdentity( option ){
 	option = option || this.option;
 
-	if( option.data && option.identity ){
+	if( truu( option.data ) && truu( option.identity ) ){
 		option.data.reference = option.data.reference || option.identity.reference;
 		option.data.hash = option.data.hash || option.identity.hash;
 		option.data.stamp = option.data.stamp || option.identity.stamp;
@@ -713,13 +708,13 @@ Dendron.prototype.loose = function loose( ){
 	@end-method-documentation
 */
 Dendron.prototype.use = function use( method ){
-	if( typeof method != FUNCTION ){
+	if( !protype( method, FUNCTION ) ){
 		Fatal( "invalid method", method );
 
 		return this;
 	}
 
-	if( !this.engine ){
+	if( falze( this.engine ) ){
 		Fatal( "engine not configured" );
 
 		return this;
@@ -730,7 +725,7 @@ Dendron.prototype.use = function use( method ){
 
 	let Engine = this[ this.engine ];
 
-	if( !Engine ){
+	if( falze( Engine ) ){
 		Fatal( "engine does not exists" );
 
 		return this;
@@ -740,7 +735,7 @@ Dendron.prototype.use = function use( method ){
 
 	let rootEngine = Engine.engine;
 
-	if( !rootEngine ){
+	if( falze( rootEngine ) ){
 		Fatal( "root engine not created" );
 
 		return this;
@@ -778,7 +773,7 @@ Dendron.prototype.method = function method( action, name ){
 		@end-meta-configuration
 	*/
 
-	if( typeof this[ action ] == FUNCTION ){
+	if( protype( this[ action ], FUNCTION ) ){
 		return this[ action ].bind( this );
 	}
 
@@ -797,10 +792,10 @@ Dendron.prototype.method = function method( action, name ){
 
 	let methodName = llamalize( parameter );
 
-	if( typeof this[ methodName ] == FUNCTION ){
+	if( protype( this[ methodName ], FUNCTION ) ){
 		return this[ methodName ].bind( this );
 
-	}else if( typeof this[ methodName ] != FUNCTION && name != "document" ){
+	}else if( !protype( this[ methodName ], FUNCTION ) && name != "document" ){
 		Warning( "no method override", methodName, parameter )
 			.remind( "reuse parent method" )
 			.silence( )
@@ -843,7 +838,7 @@ Dendron.prototype.spawn = function spawn( ){
 	@end-method-documentation
 */
 Dendron.prototype.publish = function publish( ){
-	if( !this.engine ){
+	if( falze( this.engine ) ){
 		Fatal( "engine is not configured" );
 
 		return null;
@@ -851,7 +846,7 @@ Dendron.prototype.publish = function publish( ){
 
 	let Engine = this[ this.engine ];
 
-	if( !Engine ){
+	if( falze( Engine ) ){
 		Fatal( "engine does not exists" );
 
 		return null;
@@ -905,7 +900,7 @@ Dendron.prototype.createHash = function createHash( option, callback ){
 		@end-meta-configuration
 	*/
 
-	if( !option.factor ){
+	if( falze( option.factor ) ){
 		Warning( "no factor given", option )
 			.remind( "cannot create hash" )
 			.pass( callback, null, option );
@@ -945,7 +940,7 @@ Dendron.prototype.createHash = function createHash( option, callback ){
 
 	option.set( "hash", hash );
 
-	if( !option.identity.hash ){
+	if( falze( option.identity.hash ) ){
 		petrifi( "hash", hash, option.identity );
 	}
 
@@ -979,7 +974,7 @@ Dendron.prototype.createReference = function createReference( option, callback )
 		@end-meta-configuration
 	*/
 
-	if( !option.factor ){
+	if( falze( option.factor ) ){
 		Warning( "no factor given", option )
 			.remind( "cannot create reference" )
 			.pass( callback, null, option );
@@ -1026,7 +1021,7 @@ Dendron.prototype.createReference = function createReference( option, callback )
 
 	option.set( "reference", reference );
 
-	if( !option.identity.reference ){
+	if( falze( option.identity.reference ) ){
 		petrifi( "reference", reference, option.identity );
 	}
 
@@ -1063,7 +1058,7 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 		@end-meta-configuration
 	*/
 
-	if( !option.factor ){
+	if( falze( option.factor ) ){
 		Warning( "no factor given", option )
 			.remind( "cannot create stamp" )
 			.pass( callback, null, option );
@@ -1125,7 +1120,7 @@ Dendron.prototype.createStamp = function createStamp( option, callback ){
 	@end-method-documentation
 */
 Dendron.prototype.set = function set( property, value ){
-	if( typeof arguments[ 0 ] == OBJECT ){
+	if( protype( arguments[ 0 ], OBJECT ) ){
 		this.option = arguments[ 0 ];
 
 	}else if( property == "option" ){
