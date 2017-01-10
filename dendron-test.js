@@ -1,11 +1,13 @@
-const Dendron = require( "./dendron.js" );
-
 "use strict";
 
+const Dendron = require( "./dendron.js" );
+
 const diatom = require( "diatom" );
+const heredito = require( "heredito" );
 const optcall = require( "optcall" );
 
 const Computation = diatom( "Computation" );
+const MerchantCompute = diatom( "MerchantCompute" );
 
 Computation.prototype.initialize = function initialize( option, callback ){
 
@@ -45,4 +47,4 @@ Computation.prototype.done = function done( option, callback ) {
 
 optcall( Computation );
 
-heredito( Computation, Dendron );
+heredito( MerchantCompute, Computation );
