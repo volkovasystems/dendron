@@ -45,6 +45,42 @@ Computation.prototype.done = function done( option, callback ) {
 
 };
 
+MerchantCompute.prototype.initialize = function initialize( option, callback ){
+
+    return this;
+
+};
+
+
+MerchantCompute.prototype.compute = function compute( option, callback ) {
+	console.log( "compute" );
+
+    callback( null, null, option );
+
+    return this;
+
+};
+
+MerchantCompute.prototype.applySomeThing = function applySomeThing( option, callback ) {
+
+    console.log( "apply something", option );
+
+    callback( null, null, option );
+
+    return this;
+
+};
+
+MerchantCompute.prototype.done = function done( option, callback ) {
+
+    console.log( "done" );
+
+	callback( null, null, option );
+
+    return this;
+
+};
+
 optcall( Computation );
 
-heredito( MerchantCompute, Computation );
+heredito( MerchantCompute, Dendron );
