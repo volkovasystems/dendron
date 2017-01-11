@@ -1,6 +1,6 @@
 {
   "name": "dendron",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Internal and external core, inter- and extra- communication procedures separated from myelin.",
   "main": "dendron.js",
   "scripts": {
@@ -28,7 +28,6 @@
   "homepage": "https://github.com/volkovasystems/dendron#readme",
   "dependencies": {
     "ate": "^0.5.0",
-    "babel-runtime": "^6.20.0",
     "called": "^0.6.0",
     "cobralize": "^0.3.0",
     "diatom": "^0.4.0",
@@ -42,7 +41,7 @@
     "lodash": "^4.17.4",
     "loosen": "^0.2.0",
     "node-uuid": "^1.4.7",
-    "olivant": "^0.8.9",
+    "olivant": "^0.9.0",
     "optcall": "^0.7.0",
     "optfor": "^0.6.0",
     "petrifi": "^0.3.0",
@@ -50,11 +49,11 @@
     "raze": "^0.6.0",
     "shardize": "^0.4.0",
     "silph": "^0.2.0",
-    "snapd": "^0.6.0",
+    "snapd": "^0.7.0",
     "symbiote": "^0.7.0",
     "tinge": "^0.1.0",
     "titlelize": "^0.4.0",
     "truu": "^0.4.0",
-    "u200b": "^0.7.0"
+    "u200b": "^0.8.0"
   }
 }
