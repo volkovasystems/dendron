@@ -405,9 +405,9 @@ diatom@^0.5.0:
     llamalize "^0.6.0"
     protype "^0.11.0"
 
-diatom@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/diatom/-/diatom-0.6.0.tgz#b7f8210447ac1a399285fc744866920fa20f35e8"
+diatom@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/diatom/-/diatom-0.7.0.tgz#68b6b679b6b5d84d8c8a36d72e34ef514d2e4a93"
   dependencies:
     arid "^0.7.0"
     babel-runtime "^6.22.0"
@@ -665,6 +665,15 @@ heredito@^0.12.0:
     harden "^0.13.0"
     protype "^0.8.0"
     raze "^0.6.0"
+
+heredito@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/heredito/-/heredito-0.14.0.tgz#b77a59f077ad5cb274a49024924c132a4b0fc737"
+  dependencies:
+    ate "^0.7.0"
+    babel-runtime "^6.22.0"
+    protype "^0.11.0"
+    raze "^0.12.0"
 
 impel@^0.3.0:
   version "0.3.0"
