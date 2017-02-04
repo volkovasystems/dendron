@@ -65,7 +65,7 @@ MerchantCompute.prototype.applySomeThing = function applySomeThing( option, call
 
     console.log( "apply something", option );
 
-    callback( null, null, option );
+    callback( null, 2, option );
 
     return this;
 
@@ -73,7 +73,7 @@ MerchantCompute.prototype.applySomeThing = function applySomeThing( option, call
 
 MerchantCompute.prototype.done = function done( option, callback ) {
 
-    console.log( "done" );
+    console.log( "done", option );
 
 	callback( null, null, option );
 

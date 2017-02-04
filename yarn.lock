@@ -631,6 +631,25 @@ glucose@^0.10.0:
     truly "^0.9.0"
     zelf "^0.6.0"
 
+glucose@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/glucose/-/glucose-0.11.0.tgz#1e14005ddfab71bdb917d4a3df04847b34b075e0"
+  dependencies:
+    babel-runtime "^6.22.0"
+    clazof "^0.5.0"
+    diatom "^0.7.0"
+    falze "^0.5.0"
+    falzy "^0.10.0"
+    harden "^0.14.0"
+    kein "^0.8.0"
+    proplist "^0.6.0"
+    protype "^0.11.0"
+    stuffed "^0.4.0"
+    transpher "^0.5.0"
+    truly "^0.9.0"
+    truu "^0.7.0"
+    zelf "^0.6.0"
+
 handlebars@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.0.6.tgz#2ce4484850537f9c97a8026d5399b935c4ed4ed7"
@@ -1023,22 +1042,23 @@ optall@^0.6.0:
     pyck "^0.8.0"
     zelf "^0.6.0"
 
-optcall@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/optcall/-/optcall-0.10.0.tgz#7f960282d0feed0766abb0d55408ebcaef9fbae9"
+optcall@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/optcall/-/optcall-0.11.0.tgz#131c03bdb01c1f1d4ed9ccb4c28205e9f3b1da38"
   dependencies:
     async "^2.1.4"
     ate "^0.8.0"
+    babel-runtime "^6.22.0"
     called "^0.10.0"
     clazof "^0.5.0"
     depher "^0.8.0"
     falzy "^0.10.0"
-    glucose "^0.10.0"
+    glucose "^0.11.0"
     harden "^0.14.0"
     kloak "^0.4.0"
     optfor "^0.10.0"
     proplist "^0.6.0"
-    protease "^0.7.0"
+    protease "^0.8.0"
     protype "^0.11.0"
     raze "^0.12.0"
     snapd "^0.13.0"
@@ -1145,9 +1165,9 @@ proplist@^0.6.0:
     babel-runtime "^6.22.0"
     meto "^0.4.0"
 
-protease@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/protease/-/protease-0.7.0.tgz#c375da7a3972cc097645bf2df4eb077e92cf0524"
+protease@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/protease/-/protease-0.8.0.tgz#c84f618838095c3d353e79a841c1bee8e9bb8c6a"
   dependencies:
     babel-runtime "^6.22.0"
     falzy "^0.10.0"
