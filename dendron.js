@@ -140,7 +140,7 @@ Dendron.prototype.initialize = function initialize( engine, option ){
 
 	engine = optfor( arguments, FUNCTION ) || optfor( arguments, STRING );
 
-	if( protype( engine, FUNCTION ) || protype( engine, STRING ) ){
+	if( protype( engine, FUNCTION, STRING ) ){
 		let name = engine.name || ( ( protype( engine, STRING ) )? engine : "" );
 		name = shardize( name );
 
@@ -446,17 +446,15 @@ Dendron.prototype.resolveData = function resolveData( option ){
 	option = option || this.option;
 
 	let entity = option.data;
-	if( _.isEmpty( entity ) ){
+	if( falze( entity ) ){
 		entity = option[ this.label ];
 	}
 
-	if( _.isEmpty( entity ) ){
+	if( falze( entity ) ){
 		entity = { };
 	}
 
-	if( !doubt( entity ).ARRAY &&
-		!_.isEmpty( entity ) )
-	{
+	if( !doubt( entity, ARRAY ) && falze( entity ) ){
 		option.data = entity;
 
 		this.set( "data", entity );
@@ -480,21 +478,19 @@ Dendron.prototype.resolveData = function resolveData( option ){
 Dendron.prototype.resolveList = function resolveList( option ){
 	option = option || this.option;
 
-	let array = option.list;
-	if( _.isEmpty( array ) ){
-		array = option[ this.label ];
+	let list = option.list;
+	if( falze( list ) ){
+		list = option[ this.label ];
 	}
 
-	if( _.isEmpty( array ) ){
-		array = [ ];
+	if( falze( list ) ){
+		list = [ ];
 	}
 
-	if( doubt( array ).ARRAY &&
-		!_.isEmpty( array ) )
-	{
-		option.list = array;
+	if( doubt( list, ARRAY ) && !falze( list ) ){
+		option.list = list;
 
-		this.set( "list", array );
+		this.set( "list", list );
 	}
 
 	return this;
