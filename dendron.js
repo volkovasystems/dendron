@@ -93,6 +93,7 @@ const diatom = require( "diatom" );
 const doubt = require( "doubt" );
 const EventEmitter = require( "events" );
 const falze = require( "falze" );
+const filled = require( "filled" );
 const fnord = require( "fnord" );
 const harden = require( "harden" );
 const hashid = require( "hashids" );
@@ -111,6 +112,7 @@ const snapd = require( "snapd" );
 const symbiote = require( "symbiote" );
 const tinge = require( "tinge" );
 const titlelize = require( "titlelize" );
+const truly = require( "truly" );
 const truu = require( "truu" );
 const U200b = require( "u200b" );
 const uuid = require( "node-uuid" );
@@ -257,6 +259,8 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 
 	let Engine = diatom( alias );
 
+	heredito( Engine, this.constructor );
+
 	Engine.prototype.name = name;
 	Engine.prototype.label = label;
 	Engine.prototype.title = title;
@@ -278,8 +282,6 @@ Dendron.prototype.wrap = function wrap( engine, option ){
 			Engine.prototype[ property ] = engine.prototype[ property ];
 		} );
 	}
-
-	heredito( Engine, this.constructor );
 
 	//: Wrap in optcall before symbiosis.
 	optcall( Engine );
@@ -526,18 +528,9 @@ Dendron.prototype.resolveFactor = function resolveFactor( option ){
 				return silph( data, point );
 			} ).bind( this ) );
 
-	factor = factor
-		.filter( function onEachFactor( point ){
-			if( protype( point, NUMBER ) && !isNaN( point ) ){
-				return true;
-			}
+	factor = factor.filter( truly );
 
-			return ( !protype( point, UNDEFINED ) &&
-				!protype( point, NULL ) &&
-				point !== "" );
-		} );
-
-	if( doubt( factor ).ARRAY && factor.length ){
+	if( filled( factor ) ){
 		option.factor = factor;
 
 		this.set( "factor", factor );
