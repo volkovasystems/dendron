@@ -39,7 +39,7 @@
     "hashids": "^1.1.1",
     "heredito": "^0.26.0",
     "llamalize": "^0.12.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.20",
     "loosen": "^0.13.0",
     "node-uuid": "^1.4.8",
     "olivant": "^0.22.0",
